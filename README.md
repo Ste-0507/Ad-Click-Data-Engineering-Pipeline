@@ -1,63 +1,122 @@
-# Ad-Click-Data-Engineering-Pipeline
-An end-to-end data engineering pipeline using Kafka, Spark, and Airflow to process 1M+ ad-click events with Delta Lake simulation and automated reporting.
-Project Overview
-This project is a comprehensive Data Engineering ecosystem designed to ingest, process, and monitor over 1,000,000 ad-click events. It simulates a high-scale production environment using Apache Kafka for real-time ingestion, Apache Spark for big data processing, and Apache Airflow for workflow orchestration.
+# Data Engineering Pipeline for Ad-Click Analytics
 
-The pipeline ensures data integrity through a custom Data Quality framework and utilizes a Delta Lake simulation to provide data versioning and "Time-Travel" capabilities.
+A scalable data engineering pipeline that ingests, processes, and monitors **1M+ ad-click events**, simulating a production-grade system.
 
-Tech Stack
-Language: Python 3.10
+---
 
-Data Processing: Apache Spark (Batch & Streaming)
+## Overview
 
-Message Broker: Apache Kafka (KRaft mode)
+This project demonstrates an end-to-end data pipeline using:
 
-Orchestration: Apache Airflow
+- **Apache Kafka** → real-time ingestion  
+- **Apache Spark** → distributed processing  
+- **Apache Airflow** → workflow orchestration  
 
-Storage: SQLite (Warehouse) & Parquet (Lakehouse)
+It includes a custom **data quality framework** and a **Delta Lake-style architecture** for versioning and time-travel queries.
 
-Quality Assurance: Pandas & NumPy Validation Framework
+---
 
-Architecture
-Generation: Mock data generator creates 1M+ realistic ad-click records.
+## Tech Stack
 
-Ingestion: Data is published to Kafka topics to simulate live event streams.
+| Layer              | Technology                     |
+|--------------------|--------------------------------|
+| Language           | Python 3.10                   |
+| Processing         | Apache Spark (Batch/Streaming)|
+| Messaging          | Apache Kafka (KRaft)          |
+| Orchestration      | Apache Airflow                |
+| Storage            | SQLite                        |
+| File Format        | Parquet, CSV                  |
+| Lakehouse Model    | Delta Lake (Simulation)       |
 
-Processing: Spark cleans raw data, handles schema enforcement, and performs star-schema transformations.
+---
 
-Orchestration: Airflow DAGs manage task dependencies, ensuring the pipeline only proceeds if data quality checks pass.
+## Pipeline Architecture
+[ Data Generator ]
+↓
+[ Kafka Topics ]
+↓
+[ Spark Processing ]
+↓
+[ Data Quality Checks ]
+↓
+[ SQLite Warehouse ]
+↓
+[ Dashboard Output ]
 
-Monitoring: An automated system generates a standalone HTML dashboard showing key performance indicators (KPIs) like Total Clicks and Average Cost.
 
-Key Features
-Lakehouse Simulation: Implemented version control for datasets using Parquet metadata, allowing for historical data recovery.
+### Stages
 
-Automated Data Quality: 3-sigma anomaly detection and completeness checks integrated directly into the pipeline.
+**1. Data Generation**
+- Produces 1M+ realistic ad-click records  
 
-End-to-End Automation: The entire stack, from raw ingestion to final reporting, is triggered via a single command or schedule.
+**2. Ingestion**
+- Streams events into Kafka topics  
 
-Project Structure
-/scripts: Core Python logic for generation, cleaning, and processing.
+**3. Processing**
+- Data cleaning and validation  
+- Schema enforcement  
+- Star schema transformation  
 
-/data: Contains the SQL warehouse and the final dashboard.html report.
+**4. Orchestration**
+- Airflow DAG controls execution flow  
+- Stops pipeline if quality checks fail  
 
-/s3_bucket: Simulated cloud storage for raw and processed assets.
+**5. Monitoring**
+- Generates HTML dashboard with:
+  - Total Clicks  
+  - Average Cost  
 
-ad_click_dag.py: The Airflow orchestration script.
+---
 
-How to Run
-Start the Kafka broker and Airflow scheduler.
+## Key Features
 
-Place ad_click_dag.py in your Airflow DAGs folder.
+**Lakehouse Simulation**
+- Version-controlled datasets using Parquet  
+- Supports time-travel queries  
 
-Execute the master pipeline:
+**Data Quality Framework**
+- 3-sigma anomaly detection  
+- Completeness checks  
 
-Bash
+**Automation**
+- Entire pipeline runs with a single command  
+
+---
+
+## Project Structure
+data_warehouse/ # Final SQL tables
+delta_lake/ads/ # Versioned Parquet data
+logs/ # Execution logs
+s3_bucket/processed/ # Simulated cloud storage
+scripts/ # Core pipeline code
+README.md # Documentation
+project_report.docx # Full report
+
+
+---
+
+## Setup
+
+> Large datasets are excluded to keep repo size under 100MB.
+
+### Install Dependencies
+
+```bash
+pip3 install pandas numpy pyspark kafka-python pyarrow
+
+# Run Pipeline
 python3 scripts/final_pipeline.py
-View the results in data/dashboard.html.
 
-Author: Soumyajit Tarafdar
+# Verify Airflow DAG
+export AIRFLOW_HOME=~/airflow_home
+airflow dags test ad_click_automation_v1 2026-04-21
+```
+View Dashboard
 
+Open in browser:
+dashboard.html
+
+
+Soumyajit Tarafdar
 Roll Number: 23052926
-
-Course: Data Engineering Capstone
+Course: Data Engineering
